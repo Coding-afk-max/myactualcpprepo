@@ -161,8 +161,9 @@ if(type < 1 || type > 3){
 }
 
 std::string name;
-std::cout << "Name: ";
-std::getline(std::cin, name);
+std::cout << "First Name: ";
+std::cin >> name;
+
 int age;
 std::cout << "Age: ";
 std::cin >> age;
@@ -171,8 +172,8 @@ int id = db.generateId();
 std::unique_ptr<student> student;
 if(type == 1){
     std::string major;
-    std::cout << "Major: ";
-    std::getline(std::cin, major);
+    std::cout << "Major (add underscore): ";
+    std::cin >> major;
     int credits;
     std::cout << "Credits: ";
     std::cin >> credits;
@@ -181,12 +182,13 @@ if(type == 1){
 }
 else if(type == 2){
 std::string thesis;
-std::getline(std::cin, thesis);
+std::cout << "Thesis (use underscores as spaces): ";
+std::cin >> thesis;
 student = std::make_unique<graduate>(name,age,id,thesis);
 }else{
 std::string country;
-std::cout << "Home country: ";
-std::getline(std::cin, country);
+std::cout << "Home country (use underscore's as spaces): ";
+std::cin >> country;
 student = std::make_unique<exchange>(name,age,id,country);
 }
 db.add(std::move(student));
