@@ -97,6 +97,7 @@ void printInfo() const override {
 }
 };
 
+//DATABASE CLASS
 class database {
 private:
 std::vector<std::unique_ptr<student>> students;
@@ -143,10 +144,92 @@ double totalTuition() const{
     return total;
 }
 };
+//ADDSTUDENT FUNCTION
+void addStudent(database& db){
+std::cout << std::endl << "Student type: " << std::endl;
+std::cout << std::endl << "1. Undergraduate" << std::endl;
+std::cout << std::endl << "2. Graduate" << std::endl;
+std::cout << std::endl << "3. Exchange" << std::endl;
+
+int type;
+std::cout << "Type: ";
+std::cin >> type;
+
+if(type < 1 || type > 3){
+    std::cout << "Invalid type";
+    return;
+}
+
+std::string name;
+std::cout << "Name: ";
+std::getline(std::cin, name);
+int age;
+std::cout << "Age: ";
+std::cin >> age;
+int id = db.generateId();
+
+std::unique_ptr<student> student;
+if(type == 1){
+    std::string major;
+    std::cout << "Major: ";
+    std::getline(std::cin, major);
+    int credits;
+    std::cout << "Credits: ";
+    std::cin >> credits;
+
+    student = std::make_unique<undergraduate>(name, age, id, major, credits);
+}
+else if(type == 2){
+std::string thesis;
+std::getline(std::cin, thesis);
+student = std::make_unique<graduate>(name,age,id,thesis);
+}else{
+std::string country;
+std::cout << "Home country: ";
+std::getline(std::cin, country);
+student = std::make_unique<exchange>(name,age,id,country);
+}
+db.add(std::move(student));
+std::cout << "Added! Student ID is" << id << std::endl;
+}
+
 
 
 //MAIN FUNCTION
 int main(){
+database db;
+
+bool running = true;
+while(running){
+    std::cout << std::endl << "Welcome to the student database!" << std::endl;
+std::cout << std::endl << "1. Add student" << std::endl;
+std::cout << std::endl << "2. List all students" << std::endl;
+std::cout << std::endl << "3. Find student by ID" << std::endl;
+std::cout << std::endl << "4. Remove student by ID" << std::endl;
+std::cout << std::endl << "5. Show total tuition" << std::endl;
+std::cout << std::endl << "0. Quit" << std::endl;
+
+int choice;
+std::cout << "Choice: ";
+std::cin >> choice;
+
+switch(choice){
+case 1:
+break;
+case 2:
+break;
+case 3:
+break;
+case 4:
+break;
+case 5:
+break;
+case 0:
+running = false;
+break;
+}
+}
+
 
     return 0;
 }
