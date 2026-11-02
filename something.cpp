@@ -215,21 +215,45 @@ std::cin >> choice;
 
 switch(choice){
 case 1:
+addStudent(db);
 break;
 case 2:
+std::cout << std::endl;
+db.listAll();
 break;
-case 3:
+case 3:{
+    int id;
+    std::cout << "Id to find: ";
+    std::cin >> id;
+    const student* found = db.findById(id);
+    if(found != nullptr){
+        found->printInfo();
+    }else{
+        std::cout << "No student with this ID";
+    }
+}
 break;
-case 4:
+case 4:{
+    int id;
+    std::cout << "Id to remove: ";
+    std::cin >> id;
+
+    if(db.removeById(id)){
+        std::cout << "Removed" << std::endl;
+    }else{
+        std::cout << "No student with this ID";
+    }
+}
 break;
 case 5:
+std::cout << "Total tuition: €" << std::fixed << std::setprecision(2) << db.totalTuition() << std::endl;
 break;
 case 0:
 running = false;
 break;
+default:
+std::cout << "No choice such as the user input exists." << std::endl;
 }
 }
-
-
     return 0;
 }
