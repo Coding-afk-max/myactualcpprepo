@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <cstdlib>
 
+//GENERAL CLASS
 class student{
 protected: //protected basically means child and parent can access this
 std::string name;
@@ -30,13 +31,14 @@ int getId() const{return id;}
 const std::string& getName() const{return name;} //this is a getter
 };
 
+//UNDERGRADUATE CLASS
 class undergraduate : public student{
     private:
     std::string major;
     int credits;
 
 public:
-undergraduate(const std::string& name, int age, int id, const std::string major, int credits) : student(name, age, id), major(major), credits(credits) {}
+undergraduate(const std::string& name, int age, int id, const std::string& major, int credits) : student(name, age, id), major(major), credits(credits) {}
 
 std::string getType() const override {
     return "Undergraduate";
@@ -53,13 +55,13 @@ void printInfo() const override {
 
 }
 };
-
+//GRADUATE CLASS
 class graduate : public student{
 private:
 std::string thesisTopic;
 
 public:
-graduate(const std::string& name, int age, int id, const std::string thesisTopic) : student(name, age, id), thesisTopic(thesisTopic) {}
+graduate(const std::string& name, int age, int id, const std::string& thesisTopic) : student(name, age, id), thesisTopic(thesisTopic) {}
 
 std::string getType() const override {
     return "Graduate";
@@ -74,6 +76,76 @@ void printInfo() const override {
 };
 
 
+//EXCHANGE CLASS
+class exchange : public student{
+private:
+std::string homeCountry;
+public:
+exchange(const std::string& name, int age, int id, const std::string& homeCountry) : student(name, age, id), homeCountry(homeCountry) {}
+
+std::string getType() const override {
+    return "Exchange";
+}
+
+double calculateTuition() const override {
+    return 1500.0;
+}
+
+void printInfo() const override {
+    student::printInfo();
+    std::cout << "Home country: " << homeCountry << std::endl;
+}
+};
+
+class database {
+private:
+std::vector<std::unique_ptr<student>> students;
+int nextId = 1;
+public:
+int generateId(){
+    return nextId++;
+}
+void add(std::unique_ptr<student> student1) {
+    students.push_back(std::move(student1));
+}
+void listAll() const {
+if (students.empty()) {
+std::cout << "The database is empty /:" << std::endl;
+return;
+}
+for (const auto& s : students) {
+    s->printInfo();
+}
+}
+const student* findById(int id) const {
+    for(const auto& s : students) {
+        if(s->getId() == id){
+            return s.get();
+        }
+    }
+    return nullptr;
+}
+
+bool removeById(int id){
+    for(auto it = students.begin(); it != students.end(); ++it){
+if((*it)->getId() == id){
+    students.erase(it);
+    return true;
+}
+    }
+    return false;
+}
+double totalTuition() const{
+    double total = 0.0;
+    for(const auto& s : students){
+        total += s->calculateTuition();
+    }
+    return total;
+}
+};
+
+
+//MAIN FUNCTION
 int main(){
 
     return 0;
