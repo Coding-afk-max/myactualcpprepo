@@ -194,5 +194,23 @@ print("Words", words);
 
 myVector<double> filled(4, 2.5);
 print("Filled(4, 2.5)", filled);
+
+std::cout << std::endl << "--- Copy (independent) ---" << std::endl;
+myVector<std::string> copy = words;
+copy[0] = "CHANGED";
+print("Original", words);
+print("copy    ", copy);
+
+std::cout << std::endl << "--- assignment ---" << std::endl;
+myVector<std::string> other = {"A", "B"};
+other = words;
+other[1] = "ZZZ";
+print("Words", words);
+print("other", other);
+
+std::cout << std::endl << "--- Move: Steals and does not copy. ---" << std::endl;
+myVector<std::string> moved = std::move(words);
+print("Moved          ", moved);
+print("Words (emptied)", words);
     return 0;
 }
