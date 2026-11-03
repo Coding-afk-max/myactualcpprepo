@@ -174,7 +174,25 @@ try{
     std::cout << "Caught: " << e.what() << std::endl;
 }
 std::cout << std::endl << "--- insert, erase, pop_back ---" << std::endl;
+numbers.insert(1, 555);
+print("After insert(1, 555)", numbers);
+numbers.erase(0);
+print("After erase(0)      ", numbers);
+numbers.pop_back();
+print("After pop_back:     ", numbers);
 
+std::cout << std::endl << "--- reserve, shrink_to_fit, clear ---" << std::endl;
+numbers.reserve(100);
+print("Numbers after reserve(100)  ", numbers);
+numbers.shrink_to_fit();
+print("After shrink_to_fit         ", numbers);
 
+std::cout << std::endl << "--- strings and initializer lists ---" << std::endl;
+myVector<std::string> words = {"Hello", "Templates", "World"};
+words.push_back("!");
+print("Words", words);
+
+myVector<double> filled(4, 2.5);
+print("Filled(4, 2.5)", filled);
     return 0;
 }
