@@ -67,13 +67,105 @@ int countNeighbors(int row, int col) const{
     return count;
 }
 
-bool step
+bool step(){
+    std::vector<std::vector<int>> next(rows, std::vector<int>(cols, 0));
 
+    for(int r = 0; r < rows; ++r){
+        for(int c = 0; r < cols; ++c){
+            int n = countNeighbors(r, c);
+            
+            if(cells[r][c] == 1){
+                next[r][c] = (n == 2 || n == 3) ? 1 : 0;
+            }else{
+                next[r][c] = (n == 3) ? 1 : 0;
+            }
+        }
+    }
+    bool changed = (next != cells);
+    cells = std::move(next);
+    ++generation;
+    return changed;
+}
+int population() const{
+    int total = 0;
+    for(const auto& row : cells){
+        for(int cell : row){
+            total += cell;
+        }
+    }
+    return total;
+}
+
+void print() const{
+    std::string frame = "\33[H";
+    frame += "Generation: " + std::to_string(generation) + "   Population: " + std::to_string(population()) + "     \n";
+    for(int r = 0; r < rows; ++r){
+        for(int c = 0; c < cols; ++c){
+            frame += (cells[r][c] == 1) ? '#' : '.';
+        }
+        frame += '\n';
+    }
+    std::cout << frame << std::flush;
+}
 };
 
-
+int readIntInRange(const std::string& prompt, int low, int high){
+    while(true){
+        std::cout << prompt;
+        int value;
+        if(std::cin >> value){
+            if(value >= low && value <= high){
+                return value;
+            }
+            std::cout << "Please enter a number from " << low << "to " << high << "." << std::endl;
+        }else{
+            if(std::cin.eof()){
+                std::cout << std::endl << "Input closed." << std::endl;
+                std::exit(0);
+            }
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Numbers only please!" << std::endl;
+        }
+    }
+}
 int main(){
+const int ROWS = 24;
+const int COLS = 60;
 
 
+std::cout << "=== Conway's game of life ===" << std::endl;
+int pattern = readIntInRange("Do you wish to play the game?, enter 1 if yes, close the program if no: ", 1, 1);
+int generations = readIntInRange("How many generations: (1-2000)", 1, 2000);
+int delayMS = readIntInRange("Delay between frames (1-1000): ", 1, 1000);
+int wrapChoice = readIntInRange("Edges: 1 = wrap around, 0 = walls: ", 0, 1);
+
+life game(ROWS, COLS, wrapChoice == 1);
+
+switch(pattern){
+    case 1: 
+    game.randomize(0.30);
+    break;
+    default:
+    std::cout << "Enter a valid number";
+    break;
+}
+
+std::cout << "\033[2J";
+
+for(int g = 0; g <= generations; ++g){
+    game.print();
+    if(g == generations) break;
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(delayMS));
+
+    bool changed = game.step();
+    if(!changed){
+        game.print();
+        std::cout << "Everything died";
+        break;
+    }
+}
+std::cout << "done!";
 return 0;
 }
