@@ -49,10 +49,25 @@ int countNeighbors(int row, int col) const{
     int count = 0;
     for(int dr = -1; dr <= 1; ++dr){
         for(int dc = -1; dc <= 1; ++dc){
-            if(dr == 0 && dc == 0) continue
+            if(dr == 0 && dc == 0) continue;
+
+            int nr = row + dr;
+            int nc = col + dc;
+            if(wrap){
+                nr = (nr + rows) % rows;
+                nc = (nc + cols) % cols;
+            }else{
+                if(nr < 0 || nr >= rows || nc < 0 || nc >= cols){
+                    continue;
+                }
+            }
+            count += cells[nr][nc];
         }
     }
+    return count;
 }
+
+bool step
 
 };
 
@@ -60,5 +75,5 @@ int countNeighbors(int row, int col) const{
 int main(){
 
 
-
+return 0;
 }
